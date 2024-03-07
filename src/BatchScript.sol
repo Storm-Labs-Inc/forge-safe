@@ -153,6 +153,9 @@ abstract contract BatchScript is Script, DelegatePrank {
         } else if (chainId == 43114) {
             SAFE_API_BASE_URL = "https://safe-transaction-avalanche.safe.global/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+        } else if (chainId == 81457 ) {
+            SAFE_API_BASE_URL = "https://gateway.blast-safe.protofire.io/v1/chains/81457/safes/";
+            SAFE_MULTISEND_ADDRESS = 0x40A2aCCbd92BCA938b02010E17A5b8929b49130D;
         } else {
             revert("Unsupported chain");
         }
@@ -433,14 +436,16 @@ abstract contract BatchScript is Script, DelegatePrank {
 
     function _getNonce(address safe_) internal returns (uint256) {
         string memory endpoint = string.concat(
-            SAFE_API_BASE_URL,
-            vm.toString(safe_),
-            "/"
+            _getSafeAPIEndpoint(safe_),
+            "?limit=1"
         );
         (uint256 status, bytes memory data) = endpoint.get();
         if (status == 200) {
-            string memory result = string(data);
-            return result.readUint(".nonce");
+            string memory resp = string(data);
+            string[] memory results;
+            results = resp.readStringArray(".results");
+            if (results.length == 0) return 0;
+            return resp.readUint(".results[0].nonce") + 1;
         } else {
             revert("Get nonce failed!");
         }
