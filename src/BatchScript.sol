@@ -182,7 +182,17 @@ abstract contract BatchScript is Script {
     // Simulate then send the batch to the Safe API. If `send_` is `false`, the
     // batch will only be simulated.
     function executeBatch(bool send_) internal {
-        Batch memory batch = _createBatch(safe);
+        uint256 nonce = _getNonce(safe);
+        Batch memory batch = _createBatch(safe, nonce);
+        // _simulateBatch(safe, batch);
+        if (send_) {
+            batch = _signBatch(safe, batch);
+            _sendBatch(safe, batch);
+        }
+    }
+
+    function executeBatch(bool send_, uint256 nonce_) internal {
+        Batch memory batch = _createBatch(safe, nonce_);
         // _simulateBatch(safe, batch);
         if (send_) {
             batch = _signBatch(safe, batch);
@@ -193,7 +203,7 @@ abstract contract BatchScript is Script {
     // Private functions
 
     // Encodes the stored encoded transactions into a single Multisend transaction
-    function _createBatch(address safe_) private returns (Batch memory batch) {
+    function _createBatch(address safe_, uint256 nonce_) private view returns (Batch memory batch) {
         // Set initial batch fields
         batch.to = SAFE_MULTISEND_ADDRESS;
         batch.value = 0;
@@ -207,10 +217,7 @@ abstract contract BatchScript is Script {
         }
         batch.data = abi.encodeWithSignature("multiSend(bytes)", data);
 
-        // Batch gas parameters can all be zero and don't need to be set
-
-        // Get the safe nonce
-        batch.nonce = _getNonce(safe_);
+        batch.nonce = nonce_;
 
         // Get the transaction hash
         batch.txHash = _getTransactionHash(safe_, batch);
