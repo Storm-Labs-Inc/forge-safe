@@ -112,7 +112,7 @@ abstract contract BatchScript is Script {
             SAFE_API_BASE_URL = "https://safe-transaction-avalanche.safe.global/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
         } else if (chainId == 81457 ) {
-            SAFE_API_BASE_URL = "https://gateway.blast-safe.protofire.io/v1/chains/81457/safes/";
+            SAFE_API_BASE_URL = "https://gateway.blast-safe.protofire.io/v1/chains/81457/";
             SAFE_MULTISEND_ADDRESS = 0x40A2aCCbd92BCA938b02010E17A5b8929b49130D;
         } else {
             revert("Unsupported chain");
@@ -453,25 +453,49 @@ abstract contract BatchScript is Script {
     }
 
     function _getNonce(address safe_) private returns (uint256) {
-        string memory endpoint = string.concat(
-            _getSafeAPIEndpoint(safe_),
-            "?limit=1"
-        );
-        (uint256 status, bytes memory data) = endpoint.get();
-        if (status == 200) {
-            string memory resp = string(data);
-            string[] memory results;
-            results = resp.readStringArray(".results");
-            if (results.length == 0) return 0;
-            return resp.readUint(".results[0].nonce") + 1;
+        if (chainId == 81457) {
+            string memory endpoint = string.concat(
+                SAFE_API_BASE_URL,
+                "safes/",
+                vm.toString(safe_),
+                "/nonce"
+            );
+            (uint256 status, bytes memory data) = endpoint.get();
+            if (status == 200) {
+                string memory resp = string(data);
+                return resp.readUint(".recommendedNonce");
+            } else {
+                revert("Get nonce failed!");
+            }
         } else {
-            revert("Get nonce failed!");
+            string memory endpoint = string.concat(
+                _getSafeAPIEndpoint(safe_),
+                "?limit=1"
+            );
+            (uint256 status, bytes memory data) = endpoint.get();
+            if (status == 200) {
+                string memory resp = string(data);
+                string[] memory results;
+                results = resp.readStringArray(".results");
+                if (results.length == 0) return 0;
+                return resp.readUint(".results[0].nonce") + 1;
+            } else {
+                revert("Get nonce failed!");
+            }
         }
     }
 
     function _getSafeAPIEndpoint(
         address safe_
     ) private view returns (string memory) {
+        if (chainId == 81457) {
+            return string.concat(
+                SAFE_API_BASE_URL,
+                "transactions/",
+                vm.toString(safe_),
+                "/propose"
+            );
+        }
         return
             string.concat(
                 SAFE_API_BASE_URL,
