@@ -96,8 +96,7 @@ abstract contract BatchScript is Script {
 
     modifier isBatch(address safe_) {
         // Set the chain ID
-        Chain memory chain = getChain(vm.envString("CHAIN"));
-        chainId = chain.chainId;
+        chainId = block.chainid;
 
         // Set the Safe API base URL and multisend address based on chain
         if (chainId == 1) {
