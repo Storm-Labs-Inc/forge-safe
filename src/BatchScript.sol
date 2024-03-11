@@ -65,6 +65,7 @@ abstract contract BatchScript is Script {
 
     bytes32 private constant LOCAL = keccak256("local");
     bytes32 private constant LEDGER = keccak256("ledger");
+    bytes32 private constant TREZOR = keccak256("trezor");
 
     // Address to send transaction from
     address private safe;
@@ -125,7 +126,7 @@ abstract contract BatchScript is Script {
         walletType = keccak256(abi.encodePacked(vm.envString("WALLET_TYPE")));
         if (walletType == LOCAL) {
             privateKey = vm.envBytes32("PRIVATE_KEY");
-        } else if (walletType == LEDGER) {
+        } else if (walletType == LEDGER || walletType == TREZOR) {
             mnemonicIndex = vm.envUint("MNEMONIC_INDEX");
         } else {
             revert("Unsupported wallet type");
@@ -234,6 +235,12 @@ abstract contract BatchScript is Script {
         } else if (walletType == LEDGER) {
             wallet = string.concat(
                 "--ledger --mnemonic-index ",
+                vm.toString(mnemonicIndex),
+                " "
+            );
+        } else if (walletType == TREZOR) {
+            wallet = string.concat(
+                "--trezor --mnemonic-index ",
                 vm.toString(mnemonicIndex),
                 " "
             );
