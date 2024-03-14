@@ -112,7 +112,7 @@ abstract contract BatchScript is Script {
             SAFE_API_BASE_URL = "https://safe-transaction-avalanche.safe.global/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
         } else if (chainId == 81457 ) {
-            SAFE_API_BASE_URL = "https://gateway.blast-safe.protofire.io/v1/chains/81457/";
+            SAFE_API_BASE_URL = "https://gateway.blast-safe.io/v1/chains/81457/";
             SAFE_MULTISEND_ADDRESS = 0x40A2aCCbd92BCA938b02010E17A5b8929b49130D;
         } else {
             revert("Unsupported chain");
@@ -280,18 +280,28 @@ abstract contract BatchScript is Script {
 
         // Create json payload for API call to Gnosis transaction service
         string memory placeholder = "";
-        placeholder.serialize("safe", safe_);
+        if (chainId == 81457) {
+            placeholder.serialize("safeTxHash", batch_.txHash);
+            placeholder.serialize("origin", _uintToString(0));
+            placeholder.serialize("value", _uintToString(batch_.value));
+            placeholder.serialize("safeTxGas", _uintToString(batch_.safeTxGas));
+            placeholder.serialize("baseGas", _uintToString(batch_.baseGas));
+            placeholder.serialize("gasPrice", _uintToString(batch_.gasPrice));
+            placeholder.serialize("nonce", _uintToString(batch_.nonce));
+        } else {
+            placeholder.serialize("contractTransactionHash", batch_.txHash);
+            placeholder.serialize("safe", safe_);
+            placeholder.serialize("value", batch_.value);
+            placeholder.serialize("safeTxGas", batch_.safeTxGas);
+            placeholder.serialize("baseGas", batch_.baseGas);
+            placeholder.serialize("gasPrice", batch_.gasPrice);
+            placeholder.serialize("nonce", batch_.nonce);
+        }
         placeholder.serialize("to", batch_.to);
-        placeholder.serialize("value", batch_.value);
         placeholder.serialize("data", batch_.data);
         placeholder.serialize("operation", uint256(batch_.operation));
-        placeholder.serialize("safeTxGas", batch_.safeTxGas);
-        placeholder.serialize("baseGas", batch_.baseGas);
-        placeholder.serialize("gasPrice", batch_.gasPrice);
-        placeholder.serialize("nonce", batch_.nonce);
         placeholder.serialize("gasToken", address(0));
         placeholder.serialize("refundReceiver", address(0));
-        placeholder.serialize("contractTransactionHash", batch_.txHash);
         placeholder.serialize("signature", batch_.signature);
         string memory payload = placeholder.serialize("sender", msg.sender);
 
@@ -301,7 +311,7 @@ abstract contract BatchScript is Script {
             payload
         );
 
-        if (status == 201) {
+        if (status == 201 || (status == 200 && chainId == 81457)) {
             console2.log("Batch sent successfully");
         } else {
             console2.log(string(data));
@@ -458,7 +468,7 @@ abstract contract BatchScript is Script {
                 SAFE_API_BASE_URL,
                 "safes/",
                 vm.toString(safe_),
-                "/nonce"
+                "/nonces"
             );
             (uint256 status, bytes memory data) = endpoint.get();
             if (status == 200) {
@@ -508,5 +518,13 @@ abstract contract BatchScript is Script {
         string[] memory headers = new string[](1);
         headers[0] = "Content-Type: application/json";
         return headers;
+    }
+
+    function _uintToString(uint256 value_) private pure returns (string memory) {
+        return string.concat(
+            "\"",
+            vm.toString(value_),
+            "\""
+        );
     }
 }
