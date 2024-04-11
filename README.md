@@ -8,21 +8,25 @@ Inspired by [ape-safe](https://github.com/banteg/ape-safe) and Olymsig
 
 ## Supported Chains
 
-Only supports Mainnet, Goerli and Arbitrum currently. If you'd like more to be supported, please make a PR.
+Supports Mainnet, Goerli, Arbitrum, Optimism, Binance Smart Chain, Gnosis Chain, Polygon, zkSync, zkEVM, Base, Celo, Avalanche, Blastchain (unofficial), Sepolia, and Aurora currently. If you'd like more to be supported, please make a PR.
 
-The only chains supported by Gnosis Safe API can be found [here](https://docs.safe.global/learn/safe-core/safe-core-api/available-services#safe-transaction-service).
+The official chains supported by Gnosis Safe API can be found [here](https://docs.safe.global/advanced/api-supported-networks).
+List of multisend contract addresses can be found [here](https://docs.safe.global/advanced/smart-account-supported-networks/v1.3.0).
 
 ## Installation
 
-```forge install ind-igo/forge-safe```
+`forge install ind-igo/forge-safe`
 
 ## Usage
 
 Steps:
 
 1. In your .env file
-    - Set `CHAIN` to the name of the chain your Safe is on
-    - Set `WALLET_TYPE` with `LOCAL` or `LEDGER` depending on your wallet
+   - Set `WALLET_TYPE` with `LOCAL`, `LEDGER`, or `TREZOR` depending on your wallet
+   - If `WALLET_TYPE` is `LOCAL`:
+     - Set `PRIVATE_KEY` with your private key
+   - If `WALLET_TYPE` is `LEDGER` or `TREZOR`:
+     - Set `MNEMONIC_INDEX` with the index of the mnemonic
 2. Import `BatchScript.sol` into your Forge script
 3. Call `addToBatch()` for each encoded call
 4. After all encoded txs have been added, call `executeBatch()` with your Safe address and whether to send the transaction

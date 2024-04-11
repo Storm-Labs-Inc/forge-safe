@@ -7,9 +7,18 @@ solc_version = '0.8.17'
 auto_detect_solc = false
 optimizer_runs = 1_000
 remappings = [
-    'ds-test/=lib/ds-test/src/',
     'forge-std/=lib/forge-std/src',
     'solmate/=lib/solmate/src',
     'surl/=lib/surl/src',
 ]
 ffi = true
+
+[fmt]
+bracket_spacing = true
+int_types = "long"
+line_length = 120
+multiline_func_header = "all"
+# number_underscore = "thousands"
+quote_style = "double"
+tab_width = 4
+# wrap_comments = true
