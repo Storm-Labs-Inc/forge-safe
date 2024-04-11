@@ -5,7 +5,7 @@ pragma solidity >=0.6.2 <0.9.0;
 // Gnosis Safe transaction batching script
 
 // 🧩 MODULES
-import { Script, console2, StdChains, stdJson, stdMath, StdStorage, stdStorageSafe, VmSafe } from "forge-std/Script.sol";
+import { Script, console2, stdJson } from "forge-std/Script.sol";
 import { Surl } from "../lib/surl/src/Surl.sol";
 
 // ⭐️ SCRIPT
@@ -60,10 +60,12 @@ abstract contract BatchScript is Script {
     bytes32 private walletType;
     uint256 private mnemonicIndex;
     bytes32 private privateKey;
+    string private accountName;
 
     bytes32 private constant LOCAL = keccak256("local");
     bytes32 private constant LEDGER = keccak256("ledger");
     bytes32 private constant TREZOR = keccak256("trezor");
+    bytes32 private constant ACCOUNT = keccak256("account");
 
     // Address to send transaction from
     address private safe;
@@ -157,6 +159,8 @@ abstract contract BatchScript is Script {
             privateKey = vm.envBytes32("PRIVATE_KEY");
         } else if (walletType == LEDGER || walletType == TREZOR) {
             mnemonicIndex = vm.envUint("MNEMONIC_INDEX");
+        } else if (walletType == ACCOUNT) {
+            accountName = vm.envString("ACCOUNT_NAME");
         } else {
             revert("Unsupported wallet type");
         }
@@ -191,31 +195,17 @@ abstract contract BatchScript is Script {
     // Convenience funtion to add an encoded transaction to the batch, but passes
     // 0 as the `value` (equivalent to msg.value) field.
     function addToBatch(address to_, bytes memory data_) internal returns (bytes memory) {
-        // Add transaction to batch array
-        encodedTxns.push(abi.encodePacked(Operation.CALL, to_, uint256(0), data_.length, data_));
-
-        // Simulate transaction and get return value
-        vm.prank(safe);
-        (bool success, bytes memory data) = to_.call(data_);
-        if (success) {
-            return data;
-        } else {
-            revert(string(data));
-        }
+        return addToBatch(to_, 0, data_);
     }
 
     // Simulate then send the batch to the Safe API. If `send_` is `false`, the
     // batch will only be simulated.
     function executeBatch(bool send_) internal {
         uint256 nonce = _getNonce(safe);
-        Batch memory batch = _createBatch(safe, nonce);
-        // _simulateBatch(safe, batch);
-        if (send_) {
-            batch = _signBatch(safe, batch);
-            _sendBatch(safe, batch);
-        }
+        executeBatch(send_, nonce);
     }
 
+    // Simulate then send the batch to the Safe API. If `send_` is `false`, the
     function executeBatch(bool send_, uint256 nonce_) internal {
         Batch memory batch = _createBatch(safe, nonce_);
         // _simulateBatch(safe, batch);
@@ -226,6 +216,30 @@ abstract contract BatchScript is Script {
     }
 
     // Private functions
+
+    // Get the sender address based on the wallet type
+    function _getSenderAddress() private returns (address) {
+        // Construct the sign command
+        string memory commandStart = "cast wallet address ";
+        string memory wallet;
+        if (walletType == LOCAL) {
+            return vm.addr(uint256(privateKey));
+        } else if (walletType == LEDGER) {
+            wallet = string.concat("--ledger --mnemonic-index ", vm.toString(mnemonicIndex), " ");
+        } else if (walletType == TREZOR) {
+            wallet = string.concat("--trezor --mnemonic-index ", vm.toString(mnemonicIndex), " ");
+        } else if (walletType == ACCOUNT) {
+            wallet = string.concat("--account ", accountName, " ");
+        } else {
+            revert("Unsupported wallet type");
+        }
+        // Sign the typed data from the CLI and get the signature
+        string[] memory inputs = new string[](3);
+        inputs[0] = "bash";
+        inputs[1] = "-c";
+        inputs[2] = string.concat(commandStart, wallet);
+        return vm.parseAddress(vm.toString(vm.ffi(inputs)));
+    }
 
     // Encodes the stored encoded transactions into a single Multisend transaction
     function _createBatch(address safe_, uint256 nonce_) private view returns (Batch memory batch) {
@@ -261,6 +275,8 @@ abstract contract BatchScript is Script {
             wallet = string.concat("--ledger --mnemonic-index ", vm.toString(mnemonicIndex), " ");
         } else if (walletType == TREZOR) {
             wallet = string.concat("--trezor --mnemonic-index ", vm.toString(mnemonicIndex), " ");
+        } else if (walletType == ACCOUNT) {
+            wallet = string.concat("--account ", accountName, " ");
         } else {
             revert("Unsupported wallet type");
         }
@@ -307,7 +323,7 @@ abstract contract BatchScript is Script {
         placeholder.serialize("gasToken", address(0));
         placeholder.serialize("refundReceiver", address(0));
         placeholder.serialize("signature", batch_.signature);
-        string memory payload = placeholder.serialize("sender", msg.sender);
+        string memory payload = placeholder.serialize("sender", _getSenderAddress());
 
         // Send batch
         (uint256 status, bytes memory data) = endpoint.post(_getHeaders(), payload);

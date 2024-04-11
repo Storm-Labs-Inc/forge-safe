@@ -22,11 +22,14 @@ List of multisend contract addresses can be found [here](https://docs.safe.globa
 Steps:
 
 1. In your .env file
-   - Set `WALLET_TYPE` with `LOCAL`, `LEDGER`, or `TREZOR` depending on your wallet
-   - If `WALLET_TYPE` is `LOCAL`:
+   - Set `WALLET_TYPE` with `local`, `ledger`, `trezor`, or `account` depending on your wallet
+   - If `WALLET_TYPE` is `local`:
      - Set `PRIVATE_KEY` with your private key
-   - If `WALLET_TYPE` is `LEDGER` or `TREZOR`:
+   - If `WALLET_TYPE` is `ledger` or `trezor`:
      - Set `MNEMONIC_INDEX` with the index of the mnemonic
+   - If `WALLET_TYPE` is `account`:
+     - Set `ACCOUNT_NAME` with the name of the account saved in the forge cast wallet
+
 2. Import `BatchScript.sol` into your Forge script
 3. Call `addToBatch()` for each encoded call
 4. After all encoded txs have been added, call `executeBatch()` with your Safe address and whether to send the transaction
