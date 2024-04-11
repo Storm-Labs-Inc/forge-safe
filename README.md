@@ -8,20 +8,29 @@ Inspired by [ape-safe](https://github.com/banteg/ape-safe) and Olymsig
 
 ## Supported Chains
 
-Supports Mainnet, Goerli, Arbitrum, Optimism, Binance Smart Chain, Gnosis Chain, Polygon, zkSync, zkEVM, Base, Celo, Avalanche, Blastchain (unofficial), Sepolia, and Aurora currently. If you'd like more to be supported, please make a PR.
+### Official Gnosis Safe API supported chains
+
+Supports Mainnet, Sepolia, Arbitrum, Optimism, Binance Smart Chain, Gnosis Chain, Polygon, zkSync, zkEVM, Base, Base Sepolia Celo, Avalanche, and Aurora.
+
+### Unofficial Safe API supported chains
+
+Supports Fantom and Blast.
+
+If you'd like more to be supported, please make a PR.
 
 The official chains supported by Gnosis Safe API can be found [here](https://docs.safe.global/advanced/api-supported-networks).
 List of multisend contract addresses can be found [here](https://docs.safe.global/advanced/smart-account-supported-networks/v1.3.0).
 
 ## Installation
 
-`forge install ind-igo/forge-safe`
+`forge install Storm-Labs-Inc/forge-safe`
 
 ## Usage
 
 Steps:
 
 1. In your .env file
+
    - Set `WALLET_TYPE` with `local`, `ledger`, `trezor`, or `account` depending on your wallet
    - If `WALLET_TYPE` is `local`:
      - Set `PRIVATE_KEY` with your private key
@@ -42,7 +51,7 @@ import {BatchScript} from "forge-safe/BatchScript.sol";
 
 ...
 
-function run(bool send_) public {
+function run(bool send_) public isBatch(safe) {
         string memory gm = "gm";
         address greeter = 0x1111;
 
