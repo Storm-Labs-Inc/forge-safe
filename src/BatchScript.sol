@@ -98,57 +98,60 @@ abstract contract BatchScript is Script {
         // Set the chain ID
         chainId = block.chainid;
 
-        // Set the Safe API base URL and multisend address based on chain
+        // Set the Safe API base URL and MultiSendCallOnly address based on chain
         // Source of truth for urls: https://docs.safe.global/advanced/api-supported-networks
         // Source of truth for addresses https://docs.safe.global/advanced/smart-account-supported-networks/v1.3.0
         if (chainId == 1) {
             SAFE_API_BASE_URL = "https://safe-transaction-mainnet.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 10) {
             SAFE_API_BASE_URL = "https://safe-transaction-optimism.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0x998739BFdAAdde7C933B942a68053933098f9EDa;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 56) {
             SAFE_API_BASE_URL = "https://safe-transaction-bsc.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 100) {
             SAFE_API_BASE_URL = "https://safe-transaction-gnosis-chain.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 137) {
             SAFE_API_BASE_URL = "https://safe-transaction-polygon.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
+        } else if (chainId == 146) {
+            SAFE_API_BASE_URL = "https://safe-transaction-sonic.safe.global/api/v1/safes/";
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 250) {
             SAFE_API_BASE_URL = "https://safe-txservice.fantom.network/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 324) {
             SAFE_API_BASE_URL = "https://safe-transaction-zksync.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0x0dFcccB95225ffB03c6FBB2559B530C2B7C8A912;
+            SAFE_MULTISEND_ADDRESS = 0xf220D3b4DFb23C4ade8C88E526C1353AbAcbC38F;
         } else if (chainId == 1101) {
             SAFE_API_BASE_URL = "https://safe-transaction-zkevm.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 8453) {
             SAFE_API_BASE_URL = "https://safe-transaction-base.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0x998739BFdAAdde7C933B942a68053933098f9EDa;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 42161) {
             SAFE_API_BASE_URL = "https://safe-transaction-arbitrum.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 42220) {
             SAFE_API_BASE_URL = "https://safe-transaction-celo.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0x998739BFdAAdde7C933B942a68053933098f9EDa;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 43114) {
             SAFE_API_BASE_URL = "https://safe-transaction-avalanche.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 81457) {
             SAFE_API_BASE_URL = "https://gateway.blast-safe.io/v1/chains/81457/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 84532) {
             SAFE_API_BASE_URL = "https://safe-transaction-base-sepolia.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0x998739BFdAAdde7C933B942a68053933098f9EDa;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 1313161554) {
             SAFE_API_BASE_URL = "https://safe-transaction-aurora.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 11155111) {
             SAFE_API_BASE_URL = "https://safe-transaction-sepolia.safe.global/api/v1/safes/";
-            SAFE_MULTISEND_ADDRESS = 0x998739BFdAAdde7C933B942a68053933098f9EDa;
+            SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else {
             revert("Unsupported chain");
         }
@@ -222,6 +225,7 @@ abstract contract BatchScript is Script {
 
     // Get the sender address based on the wallet type
     function _getSenderAddress() private returns (address) {
+        console2.log("forge-safe: verifying sender address");
         // Construct the sign command
         string memory commandStart = "cast wallet address ";
         string memory wallet;
@@ -270,6 +274,7 @@ abstract contract BatchScript is Script {
         string memory typedData = _getTypedData(safe_, batch_);
 
         // Construct the sign command
+        console2.log("forge-safe: signing batch");
         string memory commandStart = "cast wallet sign ";
         string memory wallet;
         if (walletType == LOCAL) {
