@@ -16,3 +16,7 @@ broadcast
 # Ignore local misc files
 .DS_Store
 *.pem
+
+# Ignore cursor related files
+.cursor/
+memory-bank/
