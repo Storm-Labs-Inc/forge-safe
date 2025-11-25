@@ -99,58 +99,58 @@ abstract contract BatchScript is Script {
         chainId = block.chainid;
 
         // Set the Safe API base URL and MultiSendCallOnly address based on chain
-        // Source of truth for urls: https://docs.safe.global/advanced/api-supported-networks
+        // Source of truth for urls: https://github.com/safe-global/safe-core-sdk/blob/main/packages/api-kit/src/utils/config.ts
         // Source of truth for addresses https://docs.safe.global/advanced/smart-account-supported-networks/v1.3.0
         if (chainId == 1) {
-            SAFE_API_BASE_URL = "https://safe-transaction-mainnet.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/eth/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 10) {
-            SAFE_API_BASE_URL = "https://safe-transaction-optimism.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/oeth/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 56) {
-            SAFE_API_BASE_URL = "https://safe-transaction-bsc.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/bnb/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 100) {
-            SAFE_API_BASE_URL = "https://safe-transaction-gnosis-chain.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/gno/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 137) {
-            SAFE_API_BASE_URL = "https://safe-transaction-polygon.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/pol/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 146) {
-            SAFE_API_BASE_URL = "https://safe-transaction-sonic.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/sonic/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 250) {
             SAFE_API_BASE_URL = "https://safe-txservice.fantom.network/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 324) {
-            SAFE_API_BASE_URL = "https://safe-transaction-zksync.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/zksync/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0xf220D3b4DFb23C4ade8C88E526C1353AbAcbC38F;
         } else if (chainId == 1101) {
-            SAFE_API_BASE_URL = "https://safe-transaction-zkevm.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/zkevm/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 8453) {
-            SAFE_API_BASE_URL = "https://safe-transaction-base.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/base/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 42161) {
-            SAFE_API_BASE_URL = "https://safe-transaction-arbitrum.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/arb1/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 42220) {
-            SAFE_API_BASE_URL = "https://safe-transaction-celo.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/celo/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 43114) {
-            SAFE_API_BASE_URL = "https://safe-transaction-avalanche.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/avax/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 81457) {
             SAFE_API_BASE_URL = "https://gateway.blast-safe.io/v1/chains/81457/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 84532) {
-            SAFE_API_BASE_URL = "https://safe-transaction-base-sepolia.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/basesep/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 1313161554) {
-            SAFE_API_BASE_URL = "https://safe-transaction-aurora.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/aurora/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else if (chainId == 11155111) {
-            SAFE_API_BASE_URL = "https://safe-transaction-sepolia.safe.global/api/v1/safes/";
+            SAFE_API_BASE_URL = "https://api.safe.global/tx-service/sep/api/v1/safes/";
             SAFE_MULTISEND_ADDRESS = 0x9641d764fc13c8B624c04430C7356C1C7C8102e2;
         } else {
             revert("Unsupported chain");
